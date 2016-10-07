@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-#include "Quad.h";
+#include "Quad.h"
 
 class Cell : public Quad
 {
@@ -28,5 +28,6 @@ public:
 	void setEnd();
 	void setTrap();
 	void setPath();
+	void setCellColor();
 };
 

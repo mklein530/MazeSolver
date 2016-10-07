@@ -29,27 +29,26 @@ void onMouseClick(int button, int state, int x, int y) {
 	float mx = -1 + 2 * (float)x / SCREEN_WIDTH;
 	float my = -1 + 2 * (float)(SCREEN_HEIGHT - y) / SCREEN_HEIGHT;
 
-	Cell * clickedCell = &maze.clickedCell(mx, my);
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+	int clickedCell = maze.clickedCell(mx, my);
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && clickedCell != -1) {
 		leftClickCount++;
 
 		if (leftClickCount == 1) {
 			//start tile
-			maze.setStart(*clickedCell);
+			maze.setStart(clickedCell);
 		}
 		else if (leftClickCount == 2) {
 			//end tile
-			maze.setEnd(*clickedCell);
+			maze.setEnd(clickedCell);
 		}
 		else if (leftClickCount > 2) {
 			//path tile
-			maze.setPath(*clickedCell);
+			maze.setPath(clickedCell);
 		}
 	}
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		maze.setTrap(*clickedCell);
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && clickedCell != -1) {
+		maze.setTrap(clickedCell);
 	}
-	glutPostRedisplay();
 }
 
 void displayMe(void) {
@@ -83,7 +82,7 @@ void displayMe(void) {
 	}
 	
 	
-	//getchar();
+	//  getchar();
 	glFlush();
 }
 
@@ -94,6 +93,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(0, 0);                    // distance from the top-left screen
 	glutCreateWindow("MazeSolver");                  // message displayed on top bar window
 	glutDisplayFunc(displayMe);
+	glutIdleFunc(displayMe);
 	glutMouseFunc(onMouseClick);
 	glutMainLoop();
 	return 0;

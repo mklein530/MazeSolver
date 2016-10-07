@@ -23,11 +23,11 @@ public:
 	void drawCells();
 	void drawLines();
 	void createMaze();
-	void setStart(Cell &);
-	void setEnd(Cell &);
-	void setTrap(Cell &);
-	void setPath(Cell &);
+	void setStart(int);
+	void setEnd(int);
+	void setTrap(int);
+	void setPath(int);
 	int getSize();
-	Cell clickedCell(GLfloat, GLfloat);
+	int clickedCell(GLfloat, GLfloat);
 };
 

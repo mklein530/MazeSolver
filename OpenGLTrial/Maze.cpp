@@ -26,15 +26,15 @@ void Maze::createMaze() {
 void Maze::drawCells() {
 	int row = 1;
 	//start at top left of window, adjust for offset
-	for (GLfloat y = (Y_TOPLEFT - Y_OFFSET); row <= height; y -= Y_OFFSET) {
+	for (GLfloat y = (Y_TOPLEFT - Y_OFFSET); row < height; y -= Y_OFFSET) {
 		int col = 1;
-		for (GLfloat x = (X_TOPLEFT + X_OFFSET); col <= width; x += X_OFFSET) {
+		for (GLfloat x = (X_TOPLEFT + X_OFFSET); col < width; x += X_OFFSET) {
 			int currentCell = (row - 1)*width + col;
 			cells.at(currentCell).setX1(x);
 			cells.at(currentCell).setX2(x + X_OFFSET);
 			cells.at(currentCell).setY1(y);
 			cells.at(currentCell).setY2(y - Y_OFFSET);
-			cells.at(currentCell).setColor(0.5f, 0.5f, 0.5f);
+			cells.at(currentCell).setCellColor();
 			cells.at(currentCell).draw();
 			col++;
 		}
@@ -74,30 +74,31 @@ void Maze::drawLines() {
 	}
 }
 
-Cell Maze::clickedCell(GLfloat mx, GLfloat my) {
+int Maze::clickedCell(GLfloat mx, GLfloat my) {
 	//linear comparison of all x and y coordinates of squares
 	for (int i = 0; i < cells.size(); i++) {
 		Cell currentCell = cells.at(i);
 		if (mx > currentCell.getX1() && mx < currentCell.getX2() &&
 			my < currentCell.getY1() && my > currentCell.getY2()) {
 			//this is the clicked square
-			return currentCell;
+			return i;
 		}
 	}
+	return -1;
 }
 
-void Maze::setStart(Cell &cell) {
-	cell.setStart();
+void Maze::setStart(int index) {
+	cells.at(index).setStart();
 }
 
-void Maze::setEnd(Cell &cell){
-	cell.setEnd();
+void Maze::setEnd(int index){
+	cells.at(index).setEnd();
 }
 
-void Maze::setTrap(Cell &cell) {
-	cell.setTrap();
+void Maze::setTrap(int index) {
+	cells.at(index).setTrap();
 }
 
-void Maze::setPath(Cell &cell) {
-	cell.setPath();
+void Maze::setPath(int index) {
+	cells.at(index).setPath();
 }

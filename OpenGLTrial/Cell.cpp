@@ -3,6 +3,10 @@
 Cell::Cell(int rowNum, int colNum) : Quad() {
 	this->rowNum = rowNum;
 	this->colNum = colNum;
+	start = false;
+	end = false;
+	trap = false;
+	wall = true;
 }
 
 Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2) :
@@ -10,6 +14,10 @@ Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, doub
 {
 	this->rowNum = rowNum;
 	this->colNum = colNum;
+	start = false;
+	end = false;
+	trap = false;
+	wall = true;
 }
 
 int Cell::getRowNum() { return rowNum; }
@@ -32,26 +40,30 @@ void Cell::setVisited() {
 
 void Cell::setStart() { 
 	start = true;
-	this->setColor(0.0f, 0.0f, 1.0f);
-	this->draw();
 }
 
 void Cell::setEnd() {
 	end = true;
-	this->setColor(0.0f, 1.0f, 0.0f);
-	this->draw();
 }
 
 void Cell::setTrap() {
 	trap = true;
-	this->setColor(1.0f, 0.0f, 0.0f);
-	this->draw();
 }
 
 void Cell::setPath() {
 	wall = false;
-	this->setColor(0.0f, 0.0f, 0.0f);
-	this->draw();
+}
+
+void Cell::setCellColor() {
+	if (!wall)
+		setColor(1.0f, 1.0f, 1.0f);
+	else if (start)
+		setColor(0.0f, 0.0f, 1.0f);
+	else if (end)
+		setColor(0.0f, 1.0f, 0.0f);
+	else if (trap)
+		setColor(1.0f, 0.0f, 0.0f);
+	else setColor(0.5f, 0.5f, 0.5f);
 }
 
 
