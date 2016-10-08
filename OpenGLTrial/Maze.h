@@ -35,6 +35,6 @@ public:
 	int clickedCell(GLfloat, GLfloat);
 
 	void BFS();
-	vector<Cell> getAdjacents(Cell cell);
+	void getAdjacents(Cell cell, vector<Cell *> & adjacentCells);
 };
 
