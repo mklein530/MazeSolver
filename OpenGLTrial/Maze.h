@@ -1,9 +1,11 @@
-#include <gl/glew.h>
-#include <gl/freeglut.h>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <vector>
 #include "Quad.h"
 #include "Cell.h"
 #include <vector>
+#include <queue>
+#include <list>
 
 using namespace std;
 
@@ -18,6 +20,8 @@ private:
 	int height;					  //number of rows in maze
 	int size;					  //number of cells in maze
 	vector<Cell> cells;			  //the cells of the maze
+	Cell startCell;
+	Cell endCell;
 public:
 	Maze(int width, int height);
 	void drawCells();
@@ -29,5 +33,8 @@ public:
 	void setPath(int);
 	int getSize();
 	int clickedCell(GLfloat, GLfloat);
+
+	void BFS();
+	vector<Cell> getAdjacents(Cell cell);
 };
 

@@ -73,7 +73,7 @@ void Quad::draw() {
 	glVertex2f(x1, y1);   //top left
 	glVertex2f(x1, y2);   //bottom left
 	glVertex2f(x2, y1);   //top right
-							//triangle two
+	//triangle two
 	glVertex2f(x2, y2);	  //bottom right
 	glVertex2f(x1, y2);   //bottom left
 	glVertex2f(x2, y1);   //top right

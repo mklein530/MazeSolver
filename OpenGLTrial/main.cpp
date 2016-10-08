@@ -16,11 +16,13 @@ using namespace std;
 
 int leftClickCount = 0;
 int health = 100;
-Maze maze(13, 13);
+Maze maze(12, 12);
 
-void onKeyPress(char key, int x, int y) {
+void onKeyPress(unsigned char key, int x, int y) {
+	printf("%d", key);
 	if (key == 13) {
-		//train AI to solve maze
+		printf("enter pressed\n");
+		maze.BFS();
 	}
 }
 
@@ -46,7 +48,7 @@ void onMouseClick(int button, int state, int x, int y) {
 			maze.setPath(clickedCell);
 		}
 	}
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && clickedCell != -1) {
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && clickedCell != -1) {
 		maze.setTrap(clickedCell);
 	}
 }
@@ -81,8 +83,6 @@ void displayMe(void) {
 		glutBitmapCharacter(font, healthString[i]);
 	}
 	
-	
-	//  getchar();
 	glFlush();
 }
 
@@ -95,6 +95,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(displayMe);
 	glutIdleFunc(displayMe);
 	glutMouseFunc(onMouseClick);
+	glutKeyboardFunc(onKeyPress);
 	glutMainLoop();
 	return 0;
 }

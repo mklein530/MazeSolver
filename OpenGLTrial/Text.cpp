@@ -2,11 +2,8 @@
 
 
 
-Text::Text()
-{
+Text::Text(char * string, void * font) {
+	this->string = string;
+	this->font = font;
 }
 
-
-Text::~Text()
-{
-}

@@ -1,4 +1,18 @@
 #include "Cell.h"
+#include <iostream>
+
+using namespace std;
+
+Cell::Cell() {
+	this->rowNum = 0;
+	this->colNum = 0;
+	start = false;
+	end = false;
+	trap = false;
+	visited = false;
+	wall = true;
+	color = "empty";
+}
 
 Cell::Cell(int rowNum, int colNum) : Quad() {
 	this->rowNum = rowNum;
@@ -6,7 +20,9 @@ Cell::Cell(int rowNum, int colNum) : Quad() {
 	start = false;
 	end = false;
 	trap = false;
+	visited = false;
 	wall = true;
+	color = "empty";
 }
 
 Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2) :
@@ -17,7 +33,9 @@ Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, doub
 	start = false;
 	end = false;
 	trap = false;
+	visited = false;
 	wall = true;
+	color = "empty";
 }
 
 int Cell::getRowNum() { return rowNum; }
@@ -35,15 +53,17 @@ bool Cell::isEnd() { return end; }
 bool Cell::isTrap() { return trap; }
 
 void Cell::setVisited() {
-	this->visited = true;
+	visited = true;
 }
 
 void Cell::setStart() { 
 	start = true;
+	setPath();
 }
 
 void Cell::setEnd() {
 	end = true;
+	setPath();
 }
 
 void Cell::setTrap() {
@@ -54,17 +74,22 @@ void Cell::setPath() {
 	wall = false;
 }
 
+void Cell::printColor() {
+	cout << color << endl;
+}
+
 void Cell::setCellColor() {
-	if (!wall)
-		setColor(1.0f, 1.0f, 1.0f);
+	if (visited) {
+		setColor(1.0f, 0.5f, 0.0f);
+		color = "orange";
+	}
+	else if (wall)
+		setColor(0.5f, 0.5f, 0.5f);
 	else if (start)
 		setColor(0.0f, 0.0f, 1.0f);
 	else if (end)
 		setColor(0.0f, 1.0f, 0.0f);
 	else if (trap)
 		setColor(1.0f, 0.0f, 0.0f);
-	else setColor(0.5f, 0.5f, 0.5f);
+	else setColor(1.0f, 1.0f, 1.0f);
 }
-
-
-

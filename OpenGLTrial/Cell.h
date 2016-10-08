@@ -1,6 +1,9 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include "Quad.h"
+#include <string>
+
+using namespace std;
 
 class Cell : public Quad
 {
@@ -11,7 +14,9 @@ private:
 	bool visited;
 	int idNumber;
 	int rowNum, colNum;
+	string color;
 public:
+	Cell();
 	Cell(int rowNum, int colNum);
 	Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2);
 
@@ -29,5 +34,6 @@ public:
 	void setTrap();
 	void setPath();
 	void setCellColor();
+	void printColor();
 };
 
