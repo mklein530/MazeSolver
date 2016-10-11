@@ -35,6 +35,7 @@ void Maze::drawCells() {
 			cells.at(currentCell).setX2(x + X_OFFSET);
 			cells.at(currentCell).setY1(y);
 			cells.at(currentCell).setY2(y - Y_OFFSET);
+			cells.at(currentCell).setID((row - 1)*width + col);
 			cells.at(currentCell).setCellColor();
 			cells.at(currentCell).draw();
 			col++;
@@ -132,32 +133,48 @@ void Maze::BFS() {
 		else {
 			//for each neighbor of currentCell
 			 for (int i = 0; i < neighbors.size(); i++) {
-				//debug purposes
+				//debug purposes1
 				printf("neighbor amount: %d\n", neighbors.size());
 				//if neighbor is unvisited
 				if (!neighbors.at(i)->hasBeenVisited()) {
 					//mark neighbor as visited
 					neighbors.at(i)->setVisited();
-					neighbors.at(i)->setCellColor();
+					//set parent to id number of current cell
+					neighbors.at(i)->setParent(currentCell->getColNum()*currentCell->getRowNum());
 					//for debugging
-					printf("x1: %f\nx2: %f\n", neighbors.at(i)->getX1(), neighbors.at(i)->getX2());
+					printf("x1: %f\nx2: %f\n parent: %d\n", neighbors.at(i)->getX1(), neighbors.at(i)->getX2(), neighbors.at(i)->getParent());
 					//enqueue neighbor
 					visited.push(neighbors.at(i));
 				}
 			 }	
 			//mark currentCell examined
+			 inPath.push_back(*currentCell);
 		}
 	}
-	/*for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-		if (i->hasBeenVisited()) {
-			i->setCellColor();
-			i->printColor();
+	/*currentcell = endcell
+	while currentcell != startcell
+		for (cell in cells)
+			if(cell.parent == currentcell.idnumber)
+				cell is in shortest path
+				currentcell = cell
+				break */
+	Cell thisCell = endCell;
+	while (thisCell.getIDNumber() != startCell.getIDNumber()) {
+		//printf("in while loop");
+		printf("%d %d\n", thisCell.getIDNumber(), thisCell.getParent());
+		for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+			if (i->getParent() == thisCell.getIDNumber()) {
+				i->setShortestPath();
+				printf("id number: %d\n", i->getParent()); 
+				thisCell = *i;
+				break;
+			}
 		}
-	}*/
-	//glutPostRedisplay();
+	}
 }
 
 void Maze::getAdjacents(Cell cell, vector<Cell *> & adjacentCells) {
+	adjacentCells.clear();
 	const int MAX_ADJACENTS = 4;
 	int row = cell.getRowNum();
 	int col = cell.getColNum();
@@ -171,7 +188,7 @@ void Maze::getAdjacents(Cell cell, vector<Cell *> & adjacentCells) {
 		for (int j = 0; j < cells.size(); j++) {
 			//if row and col numbers are the same, cell is adjacent
 			if ( !cells.at(j).isWall() && indices[i][0] == cells.at(j).getRowNum() &&
-				indices[i][1] == cells.at(j).getColNum() )
+				indices[i][1] == cells.at(j).getColNum() && !cells.at(j).isMarked())
 				adjacentCells.push_back(&cells.at(j));
 		}
 	}

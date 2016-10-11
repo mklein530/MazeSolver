@@ -1,6 +1,8 @@
 ﻿  Maze.cpp
-d:\c programs\opengltrial\opengltrial\maze.h(13): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
-d:\c programs\opengltrial\opengltrial\maze.h(14): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
-d:\c programs\opengltrial\opengltrial\maze.cpp(79): warning C4018: '<': signed/unsigned mismatch
-  OpenGLTrial.vcxproj -> D:\C Programs\OpenGLTrial\Debug\OpenGLTrial.exe
-  OpenGLTrial.vcxproj -> D:\C Programs\OpenGLTrial\Debug\OpenGLTrial.pdb (Partial PDB)
+d:\school\mazesolver\opengltrial\maze.h(15): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
+d:\school\mazesolver\opengltrial\maze.h(16): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
+d:\school\mazesolver\opengltrial\maze.cpp(82): warning C4018: '<': signed/unsigned mismatch
+d:\school\mazesolver\opengltrial\maze.cpp(135): warning C4018: '<': signed/unsigned mismatch
+d:\school\mazesolver\opengltrial\maze.cpp(188): warning C4018: '<': signed/unsigned mismatch
+  OpenGLTrial.vcxproj -> D:\School\mazesolver\Debug\OpenGLTrial.exe
+  OpenGLTrial.vcxproj -> D:\School\mazesolver\Debug\OpenGLTrial.pdb (Partial PDB)
