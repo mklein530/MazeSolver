@@ -12,8 +12,8 @@ using namespace std;
 class Maze
 {
 private:
-	const GLfloat X_OFFSET = 0.1;  //distance from left side of window
-	const GLfloat Y_OFFSET = 0.1;  //distance from top side of window
+	const GLfloat X_OFFSET = 0.05;  //distance from left side of window
+	const GLfloat Y_OFFSET = 0.05;  //distance from top side of window
 	const GLfloat X_TOPLEFT = -1.0; //x value of top left of window
 	const GLfloat Y_TOPLEFT = 1.0;  //y value of top left of window
 	int width;					  //number of cells in each row

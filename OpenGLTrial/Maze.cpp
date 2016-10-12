@@ -36,7 +36,6 @@ void Maze::initializeCells() {
 			cells.at(currentCell).setY1(y);
 			cells.at(currentCell).setY2(y - Y_OFFSET);
 			cells.at(currentCell).setID((row - 1)*width + col);
-			//printf("%d\n", cells.at(currentCell).getIDNumber());
 			cells.at(currentCell).setCellColor();
 			col++;
 		}
@@ -98,7 +97,7 @@ int Maze::clickedCell(GLfloat mx, GLfloat my) {
 }
 
 // tried using the Cell objects themselves as parameters and didn't work
-// need to pratice altering object properties using references and pointersB
+// need to pratice altering object properties using references and pointers
 void Maze::setStart(int index) {
 	cells.at(index).setStart();
 	startCell = cells.at(index);
@@ -135,26 +134,21 @@ void Maze::BFS() {
 					endCell.setParent(currentCell->getParent());
 				}
 			}
-			//currentCell.setCellColor();
 			break;
 		}
 		else {
 			//for each neighbor of currentCell
 			 for (int i = 0; i < neighbors.size(); i++) {
-				//debug purposes1
 				//if neighbor is unvisited
 				if (!neighbors.at(i)->hasBeenVisited()) {
 					//mark neighbor as visited
 					neighbors.at(i)->setVisited();
 					//set parent to id number of current cell
-					printf("%d %d %d\n", currentCell->getParent(), currentCell->getIDNumber(), endCell.getParent());
 					neighbors.at(i)->setParent(currentCell->getIDNumber());
 					//enqueue neighbor
 					visited.push(neighbors.at(i));
 				}
 			 }	
-			//mark currentCell examined
-			 inPath.push_back(*currentCell);
 		}
 	}
 	/*currentcell = endcell
@@ -165,18 +159,11 @@ void Maze::BFS() {
 				currentcell = cell
 				break */
 	Cell thisCell = endCell;
-	printf("thisCell parent %d\n", thisCell.getParent());
-	while (thisCell.getIDNumber() != startCell.getIDNumber()) {
-		//printf("in while loop");
-		
+	while (thisCell.getIDNumber() != startCell.getIDNumber()) {	
 		for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-			//printf("%d\n", i->getParent());
 			if (i->getParent() != 0)
-				printf("%d %d\n", i->getParent(), thisCell.getIDNumber());
 			if (i->getIDNumber() == thisCell.getParent()) {
-				printf("test");
 				i->setShortestPath();
-				printf("id number: %d\n", i->getParent()); 
 				thisCell = *i;
 				break;
 			}
