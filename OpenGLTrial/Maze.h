@@ -25,6 +25,7 @@ private:
 public:
 	Maze(int width, int height);
 	void drawCells();
+	void initializeCells();
 	void drawLines();
 	void createMaze();
 	void setStart(int);

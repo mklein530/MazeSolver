@@ -8,6 +8,7 @@ Maze::Maze(int width, int height){
 	this->size = width*height;
 	
 	createMaze();
+	initializeCells();
 }
 
 int Maze::getSize() {
@@ -23,24 +24,30 @@ void Maze::createMaze() {
 	}
 }
 
-//draws from top left of window, where x = -1, y = 1
-void Maze::drawCells() {
+void Maze::initializeCells() {
 	int row = 1;
 	//start at top left of window, adjust for offset
 	for (GLfloat y = (Y_TOPLEFT - Y_OFFSET); row <= height; y -= Y_OFFSET) {
 		int col = 1;
 		for (GLfloat x = (X_TOPLEFT + X_OFFSET); col <= width; x += X_OFFSET) {
-			int currentCell = ( (row - 1)*width + col - 1 );
+			int currentCell = ((row - 1)*width + col - 1);
 			cells.at(currentCell).setX1(x);
 			cells.at(currentCell).setX2(x + X_OFFSET);
 			cells.at(currentCell).setY1(y);
 			cells.at(currentCell).setY2(y - Y_OFFSET);
 			cells.at(currentCell).setID((row - 1)*width + col);
+			//printf("%d\n", cells.at(currentCell).getIDNumber());
 			cells.at(currentCell).setCellColor();
-			cells.at(currentCell).draw();
 			col++;
 		}
 		row++;
+	}
+}
+//draws from top left of window, where x = -1, y = 1
+void Maze::drawCells() {
+	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+		i->setCellColor();
+		i->draw();
 	}
 }
 
@@ -113,20 +120,21 @@ void Maze::setPath(int index) {
 void Maze::BFS() {
 	queue<Cell *> visited;
 	vector<Cell *> neighbors;
-	vector<Cell> inPath;
 	vector<Cell> *mazePtr = &cells;
-	//printf("x1: %f\nx2: %f\n", startCell.getX1(), startCell.getX2());
 	visited.push(&startCell);
 	int i = 1;
 	while (!visited.empty()) {
-		i++; //debug purposes
 		Cell * currentCell = visited.front();
 		currentCell->setVisited();
 		getAdjacents(*currentCell, neighbors);
 		visited.pop();
 		if (currentCell->isEnd()) {
-			printf("iteration %d\n", i);
 			currentCell->setVisited();
+			for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+				if (i->isEnd()) {
+					endCell.setParent(currentCell->getParent());
+				}
+			}
 			//currentCell.setCellColor();
 			break;
 		}
@@ -134,15 +142,13 @@ void Maze::BFS() {
 			//for each neighbor of currentCell
 			 for (int i = 0; i < neighbors.size(); i++) {
 				//debug purposes1
-				printf("neighbor amount: %d\n", neighbors.size());
 				//if neighbor is unvisited
 				if (!neighbors.at(i)->hasBeenVisited()) {
 					//mark neighbor as visited
 					neighbors.at(i)->setVisited();
 					//set parent to id number of current cell
-					neighbors.at(i)->setParent(currentCell->getColNum()*currentCell->getRowNum());
-					//for debugging
-					printf("x1: %f\nx2: %f\n parent: %d\n", neighbors.at(i)->getX1(), neighbors.at(i)->getX2(), neighbors.at(i)->getParent());
+					printf("%d %d %d\n", currentCell->getParent(), currentCell->getIDNumber(), endCell.getParent());
+					neighbors.at(i)->setParent(currentCell->getIDNumber());
 					//enqueue neighbor
 					visited.push(neighbors.at(i));
 				}
@@ -159,11 +165,16 @@ void Maze::BFS() {
 				currentcell = cell
 				break */
 	Cell thisCell = endCell;
+	printf("thisCell parent %d\n", thisCell.getParent());
 	while (thisCell.getIDNumber() != startCell.getIDNumber()) {
 		//printf("in while loop");
-		printf("%d %d\n", thisCell.getIDNumber(), thisCell.getParent());
+		
 		for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-			if (i->getParent() == thisCell.getIDNumber()) {
+			//printf("%d\n", i->getParent());
+			if (i->getParent() != 0)
+				printf("%d %d\n", i->getParent(), thisCell.getIDNumber());
+			if (i->getIDNumber() == thisCell.getParent()) {
+				printf("test");
 				i->setShortestPath();
 				printf("id number: %d\n", i->getParent()); 
 				thisCell = *i;
