@@ -1,12 +1,12 @@
 #include "Maze.h"
 #include <functional>
 #include <memory>
+#include <climits>
 
 Maze::Maze(int width, int height){
 	this->width = width;
 	this->height = height;
 	this->size = width*height;
-	
 	createMaze();
 	initializeCells();
 }
@@ -46,7 +46,7 @@ void Maze::initializeCells() {
 void Maze::drawCells() {
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
 		i->setCellColor();
-		i->draw();
+		i->draw(); 
 	}
 }
 
@@ -119,16 +119,18 @@ void Maze::setPath(int index) {
 void Maze::BFS() {
 	queue<Cell *> visited;
 	vector<Cell *> neighbors;
-	vector<Cell> *mazePtr = &cells;
 	visited.push(&startCell);
-	int i = 1;
+
 	while (!visited.empty()) {
 		Cell * currentCell = visited.front();
-		currentCell->setVisited();
+		currentCell->setVisited(true);
 		getAdjacents(*currentCell, neighbors);
 		visited.pop();
 		if (currentCell->isEnd()) {
-			currentCell->setVisited();
+			currentCell->setVisited(true);
+			//set parent to ending cell...not a good way to do it but it works
+			//and trying to find the reason other methods weren't working
+			//was halting progress too much. will revisit to fix
 			for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
 				if (i->isEnd()) {
 					endCell.setParent(currentCell->getParent());
@@ -142,7 +144,7 @@ void Maze::BFS() {
 				//if neighbor is unvisited
 				if (!neighbors.at(i)->hasBeenVisited()) {
 					//mark neighbor as visited
-					neighbors.at(i)->setVisited();
+					neighbors.at(i)->setVisited(true);
 					//set parent to id number of current cell
 					neighbors.at(i)->setParent(currentCell->getIDNumber());
 					//enqueue neighbor
@@ -151,24 +153,51 @@ void Maze::BFS() {
 			 }	
 		}
 	}
-	/*currentcell = endcell
-	while currentcell != startcell
-		for (cell in cells)
-			if(cell.parent == currentcell.idnumber)
-				cell is in shortest path
-				currentcell = cell
-				break */
-	Cell thisCell = endCell;
-	while (thisCell.getIDNumber() != startCell.getIDNumber()) {	
-		for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-			if (i->getParent() != 0)
-			if (i->getIDNumber() == thisCell.getParent()) {
-				i->setShortestPath();
-				thisCell = *i;
-				break;
+
+	highlightPath();
+}
+
+void Maze::DFS() {
+	//start with an empty stack
+	stack<Cell *> S;
+	Cell * vertex = &startCell;
+
+	//container for all neighbors of cell being visited
+	vector<Cell *> neighbors;
+
+	//set each cell.visited = false
+	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+		i->setVisited(false);
+	}
+
+	S.push(vertex);
+
+	while (!S.empty()) {
+		Cell * currentCell = S.top();
+		S.pop();
+		if (currentCell->isEnd()) {
+			currentCell->setVisited(true);
+			for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+				if (i->isEnd()) {
+					endCell.setParent(currentCell->getParent());
+				}
+			}
+			break;
+		}
+		else if (!currentCell->hasBeenVisited()) {
+			currentCell->setVisited(true);
+			getAdjacents(*currentCell, neighbors);
+			for (vector<Cell *>::iterator i = neighbors.begin(); i != neighbors.end(); i++) {
+				Cell * neighbor = *i;
+				if (!neighbor->hasBeenVisited()) {
+					neighbor->setParent(currentCell->getIDNumber());
+					S.push(neighbor);
+				}
 			}
 		}
 	}
+	
+	highlightPath();
 }
 
 void Maze::getAdjacents(Cell cell, vector<Cell *> & adjacentCells) {
@@ -185,9 +214,68 @@ void Maze::getAdjacents(Cell cell, vector<Cell *> & adjacentCells) {
 	for (int i = 0; i < MAX_ADJACENTS; i++) {
 		for (int j = 0; j < cells.size(); j++) {
 			//if row and col numbers are the same, cell is adjacent
-			if ( !cells.at(j).isWall() && indices[i][0] == cells.at(j).getRowNum() &&
-				indices[i][1] == cells.at(j).getColNum() && !cells.at(j).isMarked())
+			if (!cells.at(j).isWall() && indices[i][0] == cells.at(j).getRowNum() &&
+				indices[i][1] == cells.at(j).getColNum())
 				adjacentCells.push_back(&cells.at(j));
+		}
+	}
+}
+
+void Maze::Dijkstra() {
+	//vector<int> distance;
+	//vector<int> previous;
+	//vector<Cell *> neighbors;
+	//distance.at(startCell.getIDNumber() - 1) = 0;
+	//priority_queue<int, vector<int>, less<int>> PQ;
+	//for (Cell cell : cells) { //for each cell in maze
+	//	if (!cell.isWall()) {
+	//		int vertex;
+	//		if (cell.getIDNumber() != startCell.getIDNumber()) {
+	//			vertex = cell.getIDNumber - 1;
+	//			distance.at(vertex) = INT_MAX; //unknown distance from start to current cell
+	//			previous.at(vertex) = NULL;    //predecessor of vertex is null
+	//		}
+	//		PQ.push(vertex);
+	//	}
+	//}
+
+	//while (!PQ.empty()) {
+	//	int bestVertex = PQ.top();	//remove and return best vertex
+	//	PQ.pop();
+	//	getAdjacents(cells.at(bestVertex), neighbors);
+	//	//for each neighbor v of bestVertex, where v has not yet been removed from PQ
+	//	for (vector<Cell *>::iterator i = neighbors.begin(); i != neighbors.end(); i++) {
+	//		int v = (*i)->getIDNumber()-1;
+	//		//distance from bestvertex to v
+	//		int alt = distance.at(bestVertex) + distanceBetween(bestVertex, v);
+	//		//if new distance is smaller than distance to v
+	//		if (alt < distance.at(v)) {
+	//			distance.at(v) = alt;
+	//			previous.at(v) = bestVertex;
+	//			//reorder v in PQ, done automatically when push or pop is called
+	//		}
+	//	}
+	//}
+}
+
+bool operator <(Cell &lhs, Cell &rhs) {
+	return lhs.getIDNumber() < rhs.getIDNumber();
+}
+
+
+// start at the goal node and traverse up the tree to the root
+void Maze::highlightPath() {
+	Cell thisCell = endCell;
+	while (thisCell.getIDNumber() != startCell.getIDNumber()) {
+		for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+			if (i->getIDNumber() == endCell.getIDNumber())
+				i->setShortestPath();
+			if (i->getParent() != 0)
+				if (i->getIDNumber() == thisCell.getParent()) {
+					i->setShortestPath();
+					thisCell = *i;
+					break;
+				}
 		}
 	}
 }

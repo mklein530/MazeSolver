@@ -40,7 +40,7 @@ public:
 	int getRowNum();
 	int getColNum();
 
-	void setVisited();
+	void setVisited(bool);
 	void setStart();
 	void setEnd();
 	void setTrap();

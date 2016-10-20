@@ -16,12 +16,16 @@ using namespace std;
 
 int leftClickCount = 0;
 int health = 100;
-Maze maze(28,28);
+Maze maze(19,19);
 
 void onKeyPress(unsigned char key, int x, int y) {
 	printf("%d", key);
-	if (key == 13) {
-		maze.BFS();
+	switch (key) {
+	case 13: maze.BFS();
+		break;
+	case 100: maze.DFS();
+		break;
+	default: break;
 	}
 }
 

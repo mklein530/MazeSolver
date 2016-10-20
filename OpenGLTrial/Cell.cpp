@@ -2,6 +2,7 @@
 #include <iostream>
 
 using namespace std;
+#define CELLS_IN_ROW 20
 
 Cell::Cell() {
 	this->rowNum = 0;
@@ -30,7 +31,7 @@ Cell::Cell(int rowNum, int colNum) : Quad() {
 	this->parent = 0;
 	marked = false;
 	shortestPath = false;
-	idNumber = (rowNum - 1) * 12 + colNum;
+	idNumber = (rowNum - 1) * CELLS_IN_ROW + colNum;
 }
 
 Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2) :
@@ -47,7 +48,7 @@ Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, doub
 	color = "empty";
 	this->parent = 0;
 	shortestPath = false;
-	idNumber = (rowNum - 1)*12 + colNum;
+	idNumber = (rowNum - 1)*CELLS_IN_ROW + colNum;
 }
 
 void Cell::setShortestPath() { shortestPath = true;  }
@@ -78,8 +79,8 @@ bool Cell::isEnd() { return end; }
 
 bool Cell::isTrap() { return trap; }
 
-void Cell::setVisited() {
-	visited = true;
+void Cell::setVisited(bool v) {
+	visited = v;
 }
 
 void Cell::setStart() { 
@@ -120,7 +121,6 @@ void Cell::setCellColor() {
 	}
 	else if (visited) {
 		setColor(1.0f, 0.5f, 0.0f);
-		color = "orange";
 	}
 	else if (wall)
 		setColor(0.5f, 0.5f, 0.5f);
