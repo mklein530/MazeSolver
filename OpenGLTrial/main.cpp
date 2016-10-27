@@ -4,6 +4,8 @@
 #include <GL\freeglut.h>
 #include <stdio.h>
 #include <string>
+#include <random>
+#include <time.h>
 #include <vector>
 #include <iostream>
 #include "Maze.h"
@@ -16,14 +18,18 @@ using namespace std;
 
 int leftClickCount = 0;
 int health = 100;
-Maze maze(19,19);
+Maze maze(20,20);
+
 
 void onKeyPress(unsigned char key, int x, int y) {
-	printf("%d", key);
 	switch (key) {
-	case 13: maze.BFS();
+	case 13: {
+		maze.randomize();
+		maze.BFS();
+	}
 		break;
-	case 100: maze.DFS();
+	case 100: 
+		maze.BFS();
 		break;
 	default: break;
 	}

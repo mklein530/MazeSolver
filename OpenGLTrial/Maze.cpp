@@ -2,13 +2,15 @@
 #include <functional>
 #include <memory>
 #include <climits>
-
+#include <random>
+#include <time.h>
 Maze::Maze(int width, int height){
 	this->width = width;
 	this->height = height;
 	this->size = width*height;
 	createMaze();
 	initializeCells();
+	srand(time(NULL));
 }
 
 int Maze::getSize() {
@@ -278,4 +280,20 @@ void Maze::highlightPath() {
 				}
 		}
 	}
+}
+
+void Maze::randomize() {
+	cells.at(randomNumber(cells.size())).setStart();
+	cells.at(randomNumber(cells.size())).setEnd();
+	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+		int wall = randomNumber(2); //generate 0 or 1
+		if (!wall)
+			if(!i->isEnd() && !i->isStart())
+				i->setPath();
+	}
+}
+
+//returns random integer on interval [0, max-1]
+int Maze::randomNumber(int max) {
+	return rand() % max;
 }

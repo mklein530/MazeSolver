@@ -41,5 +41,7 @@ public:
 	void getAdjacents(Cell cell, vector<Cell *> & adjacentCells);
 	void highlightPath();
 	void Dijkstra();
+	void randomize();
+	int randomNumber(int);
 };
 
