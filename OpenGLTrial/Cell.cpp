@@ -132,3 +132,12 @@ void Cell::setCellColor() {
 		setColor(1.0f, 0.0f, 0.0f);
 	else setColor(1.0f, 1.0f, 1.0f);
 }
+
+void Cell::reset() {
+	shortestPath = false;
+	visited = false;
+	wall = true;
+	start = false;
+	end = false;
+	trap = false;
+}

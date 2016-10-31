@@ -24,6 +24,7 @@ public:
 	Cell(int rowNum, int colNum);
 	Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2);
 
+	void reset();
 	int getIDNumber();
 	void setID(int ID);
 	void setShortestPath();

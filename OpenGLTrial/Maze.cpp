@@ -283,8 +283,13 @@ void Maze::highlightPath() {
 }
 
 void Maze::randomize() {
-	cells.at(randomNumber(cells.size())).setStart();
-	cells.at(randomNumber(cells.size())).setEnd();
+	//cells.at(randomNumber(cells.size())).setStart();
+	//cells.at(randomNumber(cells.size())).setEnd();
+	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
+		i->reset();
+	}
+	this->setStart(randomNumber(cells.size()));
+	this->setEnd(randomNumber(cells.size()));
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
 		int wall = randomNumber(2); //generate 0 or 1
 		if (!wall)

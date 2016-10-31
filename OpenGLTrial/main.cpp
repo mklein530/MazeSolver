@@ -25,7 +25,7 @@ void onKeyPress(unsigned char key, int x, int y) {
 	switch (key) {
 	case 13: {
 		maze.randomize();
-		maze.BFS();
+		//maze.BFS();
 	}
 		break;
 	case 100: 
