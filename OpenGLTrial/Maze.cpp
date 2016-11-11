@@ -282,7 +282,10 @@ void Maze::highlightPath() {
 	}
 }
 
+<<<<<<< HEAD
 //creates a random map
+=======
+>>>>>>> 0b8a74961c9e96bf422638600608abc7c0c25c85
 void Maze::randomize() {
 	//cells.at(randomNumber(cells.size())).setStart();
 	//cells.at(randomNumber(cells.size())).setEnd();
