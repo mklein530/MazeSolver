@@ -5,6 +5,7 @@
 #include "Cell.h"
 #include <vector>
 #include <queue>
+#include <stack>
 #include <list>
 
 using namespace std;
@@ -12,8 +13,8 @@ using namespace std;
 class Maze
 {
 private:
-	const GLfloat X_OFFSET = 0.1;  //distance from left side of window
-	const GLfloat Y_OFFSET = 0.1;  //distance from top side of window
+	const GLfloat X_OFFSET = 0.07;  //distance from left side of window
+	const GLfloat Y_OFFSET = 0.07;  //distance from top side of window
 	const GLfloat X_TOPLEFT = -1.0; //x value of top left of window
 	const GLfloat Y_TOPLEFT = 1.0;  //y value of top left of window
 	int width;					  //number of cells in each row
@@ -25,6 +26,7 @@ private:
 public:
 	Maze(int width, int height);
 	void drawCells();
+	void initializeCells();
 	void drawLines();
 	void createMaze();
 	void setStart(int);
@@ -35,6 +37,11 @@ public:
 	int clickedCell(GLfloat, GLfloat);
 
 	void BFS();
+	void DFS();
 	void getAdjacents(Cell cell, vector<Cell *> & adjacentCells);
+	void highlightPath();
+	void Dijkstra();
+	void randomize();
+	int randomNumber(int);
 };
 
