@@ -1,13 +1,16 @@
 #include "GeneticAlgorithm.h"
 
-GeneticAlgorithm::GeneticAlgorithm(double crossoverRate, double mutationRate, int popSize, int chromLength, int geneLength) {
+GeneticAlgorithm::GeneticAlgorithm(double crossoverRate, double mutationRate, int popSize, int chromLength, int geneLength, Maze * maze) {
 	this->crossoverRate = crossoverRate;
 	this->mutationRate = mutationRate;
 	this->popSize = popSize;
 	this->chromLength = chromLength;
 	this->geneLength = geneLength;
+	this->maze = maze;
+
 	generation = 0;
 	totalFitnessScore = 0;
+	createStartPopulation();
 }
 
 void GeneticAlgorithm::mutate(vector<geneType> &chromosome) {
@@ -75,7 +78,7 @@ void GeneticAlgorithm::updateFitnessScores() {
 		vector<int> directions = decode(population.at(i).chromosome);
 
 		//get fitness score
-		//population.at(i).fitness = testRoute(directions, mazeCopy)
+		population.at(i).fitness = maze->agentRoute(directions);
 
 		//update total
 		totalFitnessScore += population.at(i).fitness;
@@ -88,7 +91,7 @@ void GeneticAlgorithm::updateFitnessScores() {
 
 			if (population.at(i).fitness == 1) {
 				//found solution
-				//display solution
+				maze->highlightPath();
 			}
 		}
 	}

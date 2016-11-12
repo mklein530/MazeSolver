@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include "Maze.h"
+#include "GeneticAlgorithm.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -25,12 +26,14 @@ void onKeyPress(unsigned char key, int x, int y) {
 	switch (key) {
 	case 13: {
 		maze.randomize();
-		//maze.BFS();
 	}
 		break;
-	case 100: 
-		maze.BFS();
+	case 100: {
+		maze.setGA(true);
+		GeneticAlgorithm GA(CROSSOVER_RATE, MUTATION_RATE, POP_SIZE, CHROM_LENGTH, GENE_LENGTH, &maze);
+		GA.epoch();
 		break;
+	}
 	default: break;
 	}
 }

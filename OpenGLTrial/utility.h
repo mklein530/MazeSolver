@@ -5,8 +5,9 @@ using namespace std;
 
 #define CROSSOVER_RATE 0.7
 #define MUTATION_RATE 0.001
-#define POP_SIZE 100
-#define CHROM_LENGTH 70
+#define POP_SIZE 200
+#define CHROM_LENGTH 150
+#define GENE_LENGTH 2
 
 //returns a random integer between x and y
 inline int	  randInt(int x, int y) { return rand() % (y - x + 1) + x; }

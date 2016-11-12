@@ -116,17 +116,10 @@ void Cell::setID(int ID) {
 int Cell::getIDNumber() { return idNumber; }
 
 void Cell::setCellColor() {
-<<<<<<< HEAD
 	if (shortestPath && !start && !end) {
 		setColor(0.2f, 0.6f, 0.5f);
 	}
 	else if (visited && !start && !end) {
-=======
-	if (shortestPath) {
-		setColor(0.2f, 0.6f, 0.5f);
-	}
-	else if (visited) {
->>>>>>> 0b8a74961c9e96bf422638600608abc7c0c25c85
 		setColor(1.0f, 0.5f, 0.0f);
 	}
 	else if (wall)
@@ -138,6 +131,12 @@ void Cell::setCellColor() {
 	else if (trap)
 		setColor(1.0f, 0.0f, 0.0f);
 	else setColor(1.0f, 1.0f, 1.0f);
+}
+
+void Cell::setCellColor(GLfloat r, GLfloat g, GLfloat b) {
+	if (!start && !end) {
+		setColor(r, g, b);
+	}
 }
 
 void Cell::reset() {

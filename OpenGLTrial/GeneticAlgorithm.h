@@ -30,12 +30,13 @@ private:
 	double bestFitnessScore;
 	double totalFitnessScore;
 	int generation;  //current generation number
+	Maze * maze;
 
 	void mutate(vector<geneType> &chromosome);
 	void crossover(const vector<geneType> &mom,
-		const vector<geneType> &dad,
-		vector<geneType> &child1,
-		vector<geneType> &child2);
+				   const vector<geneType> &dad,
+				   vector<geneType> &child1,
+				   vector<geneType> &child2);
 	Genome& selection(); //roulette wheel selection
 
 	//update the genome fitness with the new fitness scores and 
@@ -50,7 +51,7 @@ private:
 	void createStartPopulation();
 
 public:
-	GeneticAlgorithm(double crossoverRate, double mutationRate, int popSize, int chromLength, int geneLength);
+	GeneticAlgorithm(double crossoverRate, double mutationRate, int popSize, int chromLength, int geneLength, Maze *);
 
 	void epoch();
 

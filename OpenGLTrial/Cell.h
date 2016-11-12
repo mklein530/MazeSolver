@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include "Quad.h"
+#pragma once
 #include <string>
 
 using namespace std;
@@ -47,6 +48,7 @@ public:
 	void setTrap();
 	void setPath();
 	void setCellColor();
+	void setCellColor(GLfloat r, GLfloat g, GLfloat b);
 	void printColor();
 };
 

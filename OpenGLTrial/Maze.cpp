@@ -1,9 +1,11 @@
 #include "Maze.h"
-#include <functional>
-#include <memory>
+#include <math.h>
 #include <climits>
 #include <random>
 #include <time.h>
+#include "utility.h"
+#include "windows.h"
+
 Maze::Maze(int width, int height){
 	this->width = width;
 	this->height = height;
@@ -11,8 +13,13 @@ Maze::Maze(int width, int height){
 	createMaze();
 	initializeCells();
 	srand(time(NULL));
+	GA = false;
+	static vector<GLfloat> pathColor = { 0.1f, 0.4f, 0.7f };
 }
 
+bool Maze::setGA(bool b) {
+	GA = b;
+}
 int Maze::getSize() {
 	return this->size;
 }
@@ -47,7 +54,11 @@ void Maze::initializeCells() {
 //draws from top left of window, where x = -1, y = 1
 void Maze::drawCells() {
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-		i->setCellColor();
+		//if GA is running, use overloaded setCellColor
+		if (GA) {
+			i->setCellColor(pathColor[0], pathColor[1], pathColor[2]);
+		}
+		else i->setCellColor();
 		i->draw(); 
 	}
 }
@@ -282,27 +293,67 @@ void Maze::highlightPath() {
 	}
 }
 
-<<<<<<< HEAD
 //creates a random map
-=======
->>>>>>> 0b8a74961c9e96bf422638600608abc7c0c25c85
 void Maze::randomize() {
 	//cells.at(randomNumber(cells.size())).setStart();
 	//cells.at(randomNumber(cells.size())).setEnd();
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
 		i->reset();
 	}
-	this->setStart(randomNumber(cells.size()));
-	this->setEnd(randomNumber(cells.size()));
+	this->setStart(randInt(0, cells.size()));
+	this->setEnd(randInt(0, cells.size()));
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-		int wall = randomNumber(2); //generate 0 or 1
-		if (!wall)
+		int path = randInt(0,2); // 1/3 chance to generate wall, generates number 0-2
+		if (path)
 			if(!i->isEnd() && !i->isStart())
 				i->setPath();
 	}
 }
 
-//returns random integer on interval [0, max-1]
-int Maze::randomNumber(int max) {
-	return rand() % max;
+double Maze::agentRoute(const vector<int> &path) {
+	int currentCell = startCell.getIDNumber() - 1;
+	//static vector<GLfloat> pathColor = { 0.1f, 0.4f, 0.7f };
+
+	for (int i = 0; i < path.size(); i++) {
+		int nextDirection = path.at(i);
+
+		switch (nextDirection) {
+		case 0: //Up
+			//if cell above current exists and is not a wall
+			if (currentCell - width >= 0 && !cells.at(currentCell - width).isWall()) {
+				cells.at(currentCell - width).setCellColor;
+				currentCell = currentCell - width;
+			}
+			break;
+		case 1:  //Down
+			//if cell below current exists and is not a wall
+			if ((currentCell + width) < width*height && !cells.at(currentCell + width).isWall()) {
+				cells.at(currentCell + width).setVisited(true);
+				currentCell = currentCell + width;
+			}
+			break;
+		case 2: //Left
+			//if cell to left of current cell exists and is not a wall
+			if (currentCell - 1 >= 0 && cells.at(currentCell).getColNum() - 1 == cells.at(currentCell - 1).getColNum()
+				&& !cells.at(currentCell - 1).isWall()) {
+				cells.at(currentCell - 1).setVisited(true);
+				currentCell = currentCell - 1;
+			}
+			break;
+		case 3: //Right
+				//if cell to right of current cell exists and is not a wall
+			if (currentCell + 1 < width*height && cells.at(currentCell).getColNum() + 1 == cells.at(currentCell + 1).getColNum()
+				&& !cells.at(currentCell + 1).isWall()) {
+				cells.at(currentCell + 1).setVisited(true);
+				currentCell = currentCell + 1;
+			}
+			break;
+		}
+	}
+
+	//determine difference between the agent's ending cell and the end of the maze
+	double diffX = abs(cells.at(currentCell).getX1() - endCell.getX1());
+	double diffY = abs(cells.at(currentCell).getY1() - endCell.getY1());
+
+	return 1 / (double) (diffX + diffY + 1);
 }
