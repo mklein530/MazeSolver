@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Maze.h"
 #include "GeneticAlgorithm.h"
+#include "Text.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -24,27 +25,28 @@ int index = 0;
 
 void onKeyPress(unsigned char key, int x, int y) {
 	switch (key) {
-	case 13: {
-		maze.randomize();
-		GA.epoch();
-		index++;
-	}
-		break;
-	case 103: {
-		if (index % POP_SIZE == 0) {
-			index = 0;
+		case 13: {
+			maze.randomize();
 			GA.epoch();
+			index++;
 		}
-		maze.drawAgentPath(index++);
-	}
-	    break;
-	case 98: {
-		maze.BFS();
-	}
-	case 100: {
-		maze.DFS();
-	}
-	default: break;
+			break;
+		case 103: {
+			//index tells the maze which agent to draw
+			if (index % POP_SIZE == 0) {
+				index = 0;
+				GA.epoch();
+			}
+			maze.drawAgentPath(index++);
+		}
+			break;
+		case 98: {
+			maze.BFS();
+		}
+		case 100: {
+			maze.DFS();
+		}
+		default: break;
 	}
 }
 
@@ -88,24 +90,9 @@ void displayMe(void) {
 	maze.drawCells();
 	maze.drawLines();
 
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glRasterPos2f(0.5, 0.7);
+	Text agentHealth("Health: ", GLUT_BITMAP_HELVETICA_18, 0.5f, 0.7f, { 0.0f, 0.0f, 0.0f });
+	agentHealth.display();
 
-	/*******************Display Health*****************/
-	char * healthDisplay = "Health: ";
-	int health = 100;
-	
-	void * font = GLUT_BITMAP_HELVETICA_18;
-	for (char *p = healthDisplay; *p != '\0'; p++) {
-		glutBitmapCharacter(font, *p);
-	}
-	
-	char* healthString = (char *) malloc(sizeof(char) * 3);
-	sprintf(healthString, "%d", health);
-	for (int i = 0; i < 3; i++) {
-		glutBitmapCharacter(font, healthString[i]);
-	}
-	
 	glFlush();
 }
 
