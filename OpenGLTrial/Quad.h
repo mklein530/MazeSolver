@@ -36,5 +36,5 @@ public:
 	GLfloat getY2();
 
 	void draw();
-	virtual void setColor(GLfloat, GLfloat, GLfloat);
+	void setColor(GLfloat, GLfloat, GLfloat);
 };

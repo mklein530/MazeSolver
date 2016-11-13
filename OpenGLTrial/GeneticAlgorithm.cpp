@@ -15,16 +15,16 @@ GeneticAlgorithm::GeneticAlgorithm(double crossoverRate, double mutationRate, in
 
 void GeneticAlgorithm::mutate(vector<geneType> &chromosome) {
 	for (int i = 0; i < chromosome.size(); i++) {
-		//determine if bit shoudl be flipped
+		//determine if bit should be flipped
 		if (randFloat() < mutationRate) {
 			chromosome.at(i) = !chromosome.at(i);
 		}
 	}
 }
 void GeneticAlgorithm::crossover(const vector<geneType> &mom,
-	const vector<geneType> &dad,
-	vector<geneType> &child1,
-	vector<geneType> &child2) {
+								 const vector<geneType> &dad,
+								 vector<geneType> &child1,
+								 vector<geneType> &child2) {
 	if (randFloat() > crossoverRate || mom == dad) {
 		child1 = mom;
 		child2 = dad;
@@ -78,7 +78,7 @@ void GeneticAlgorithm::updateFitnessScores() {
 		vector<int> directions = decode(population.at(i).chromosome);
 
 		//get fitness score
-		population.at(i).fitness = maze->agentRoute(directions);
+		population.at(i).fitness = maze->agentRoute(directions, population.at(i).chromColor);
 
 		//update total
 		totalFitnessScore += population.at(i).fitness;
@@ -91,7 +91,7 @@ void GeneticAlgorithm::updateFitnessScores() {
 
 			if (population.at(i).fitness == 1) {
 				//found solution
-				maze->highlightPath();
+				
 			}
 		}
 	}
@@ -133,9 +133,12 @@ int GeneticAlgorithm::binToInt(const vector<int> &v) {
 
 void GeneticAlgorithm::createStartPopulation() {
 	population.clear();
-
+	
 	for (int i = 0; i < popSize; i++) {
-		population.push_back(Genome(chromLength));
+		GLfloat r = randFloat();
+		GLfloat g = randFloat();
+		GLfloat b = randFloat();
+		population.push_back(Genome(chromLength, r, g, b));
 	}
 
 	//set all stats to 0

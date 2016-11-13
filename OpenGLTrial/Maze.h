@@ -8,8 +8,40 @@
 #include <queue>
 #include <stack>
 #include <list>
+#include <iostream>
 
 using namespace std;
+
+struct Agent {
+	vector<Cell *> path;
+	vector<GLfloat> pathColor;
+	double fitness;
+
+	Agent() { fitness = 0; }
+	Agent(const vector<Cell *> &cells, const vector<GLfloat> &color, const double fitness) {
+		path = cells;
+		pathColor = color;
+		this->fitness = fitness;  
+	}
+
+	void addCell(Cell * newCell) {
+		path.push_back(newCell);
+	}
+
+	void addColor(const vector<GLfloat> &color) {
+		for (int i = 0; i < color.size(); i++) {
+			pathColor.push_back(color.at(i));
+		}
+	}
+
+	void setColor() {
+		for (int i = 0; i < path.size(); i++) {
+			path.at(i)->setRedValue(pathColor[0]);
+			path.at(i)->setGreenValue(pathColor[1]);
+			path.at(i)->setBlueValue(pathColor[2]);
+		}
+	}
+}; 
 
 class Maze
 {
@@ -25,10 +57,10 @@ private:
 	Cell startCell;
 	Cell endCell;
 	bool GA;					  //indicates if GA is running
-	static vector<GLfloat> pathColor;
+	vector<GLfloat> pathColor;
+	vector<Agent> agents;         //represent a generation of paths produced by the Genetic Algorithm
 public:
 	Maze(int width, int height);
-	bool setGA(bool);
 	void drawCells();
 	void initializeCells();
 	void drawLines();
@@ -42,10 +74,11 @@ public:
 
 	void BFS();
 	void DFS();
-	double agentRoute(const vector<int> &path);
-	void getAdjacents(Cell cell, vector<Cell *> & adjacentCells);
+	double agentRoute(const vector<int> &path, const vector<GLfloat> &pathColor);
+	void getAdjacents(Cell cell, vector<Cell *> &adjacentCells);
 	void highlightPath();
 	void Dijkstra();
 	void randomize();
+	void drawAgentPath(int index);
 };
 

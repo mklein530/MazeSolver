@@ -4,7 +4,6 @@
 #include <random>
 #include <time.h>
 #include "utility.h"
-#include "windows.h"
 
 Maze::Maze(int width, int height){
 	this->width = width;
@@ -14,12 +13,9 @@ Maze::Maze(int width, int height){
 	initializeCells();
 	srand(time(NULL));
 	GA = false;
-	static vector<GLfloat> pathColor = { 0.1f, 0.4f, 0.7f };
+	pathColor = { 0.1f, 0.1f, 0.1f };
 }
 
-bool Maze::setGA(bool b) {
-	GA = b;
-}
 int Maze::getSize() {
 	return this->size;
 }
@@ -54,11 +50,7 @@ void Maze::initializeCells() {
 //draws from top left of window, where x = -1, y = 1
 void Maze::drawCells() {
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-		//if GA is running, use overloaded setCellColor
-		if (GA) {
-			i->setCellColor(pathColor[0], pathColor[1], pathColor[2]);
-		}
-		else i->setCellColor();
+		i->setCellColor();
 		i->draw(); 
 	}
 }
@@ -303,16 +295,17 @@ void Maze::randomize() {
 	this->setStart(randInt(0, cells.size()));
 	this->setEnd(randInt(0, cells.size()));
 	for (vector<Cell>::iterator i = cells.begin(); i != cells.end(); i++) {
-		int path = randInt(0,2); // 1/3 chance to generate wall, generates number 0-2
+		int path = randInt(0,3); // 1/3 chance to generate wall, generates number 0-2
 		if (path)
 			if(!i->isEnd() && !i->isStart())
 				i->setPath();
 	}
 }
 
-double Maze::agentRoute(const vector<int> &path) {
+double Maze::agentRoute(const vector<int> &path, const vector<GLfloat> &pathColor) {
 	int currentCell = startCell.getIDNumber() - 1;
-	//static vector<GLfloat> pathColor = { 0.1f, 0.4f, 0.7f };
+	this->pathColor = pathColor;
+	vector<Cell *> agentPath;
 
 	for (int i = 0; i < path.size(); i++) {
 		int nextDirection = path.at(i);
@@ -321,14 +314,16 @@ double Maze::agentRoute(const vector<int> &path) {
 		case 0: //Up
 			//if cell above current exists and is not a wall
 			if (currentCell - width >= 0 && !cells.at(currentCell - width).isWall()) {
-				cells.at(currentCell - width).setCellColor;
+				Cell * nextStep = &cells.at(currentCell - width);
+				agentPath.push_back(nextStep);
 				currentCell = currentCell - width;
 			}
 			break;
 		case 1:  //Down
 			//if cell below current exists and is not a wall
 			if ((currentCell + width) < width*height && !cells.at(currentCell + width).isWall()) {
-				cells.at(currentCell + width).setVisited(true);
+				Cell * nextStep = &cells.at(currentCell + width);
+				agentPath.push_back(nextStep);
 				currentCell = currentCell + width;
 			}
 			break;
@@ -336,7 +331,8 @@ double Maze::agentRoute(const vector<int> &path) {
 			//if cell to left of current cell exists and is not a wall
 			if (currentCell - 1 >= 0 && cells.at(currentCell).getColNum() - 1 == cells.at(currentCell - 1).getColNum()
 				&& !cells.at(currentCell - 1).isWall()) {
-				cells.at(currentCell - 1).setVisited(true);
+				Cell * nextStep = &cells.at(currentCell - 1);
+				agentPath.push_back(nextStep);
 				currentCell = currentCell - 1;
 			}
 			break;
@@ -344,7 +340,8 @@ double Maze::agentRoute(const vector<int> &path) {
 				//if cell to right of current cell exists and is not a wall
 			if (currentCell + 1 < width*height && cells.at(currentCell).getColNum() + 1 == cells.at(currentCell + 1).getColNum()
 				&& !cells.at(currentCell + 1).isWall()) {
-				cells.at(currentCell + 1).setVisited(true);
+				Cell * nextStep = &cells.at(currentCell + 1);
+				agentPath.push_back(nextStep);
 				currentCell = currentCell + 1;
 			}
 			break;
@@ -355,5 +352,33 @@ double Maze::agentRoute(const vector<int> &path) {
 	double diffX = abs(cells.at(currentCell).getX1() - endCell.getX1());
 	double diffY = abs(cells.at(currentCell).getY1() - endCell.getY1());
 
-	return 1 / (double) (diffX + diffY + 1);
+	double fitness = 1 / (double)(diffX + diffY + 1);
+
+	agents.push_back(Agent(agentPath, pathColor, fitness));
+
+	return fitness;
+}
+
+//draws one genome at a time
+void Maze::drawAgentPath(int index) {
+	cout << agents.size() << endl;
+	if (index < agents.size()) {
+		Agent * currentAgent = &agents.at(index);
+
+		for (vector<Cell>::iterator currentCell = cells.begin(); currentCell != cells.end(); currentCell++) {
+			for (int i = 0; i < currentAgent->path.size(); i++) {
+				if (currentAgent->path.at(i)->getIDNumber() == currentCell->getIDNumber()) {
+					currentCell->setAgent(true);
+					currentCell->setRedValue(currentAgent->pathColor[0]);
+					currentCell->setGreenValue(currentAgent->pathColor[1]);
+					currentCell->setBlueValue(currentAgent->pathColor[2]);
+				}
+			}
+		}
+	}
+	//checking address equality for debugging
+	/*for (int i = 0; i < currentAgent->path.size(); i++) {
+		cout << "Agent path cell " << i + 1 << " idnumber " << currentAgent->path.at(i)->getIDNumber() << " address: " << addressof(currentAgent->path.at(i)) << endl;
+		cout << "Corresponding Maze cell " << "idnumber " << cells.at(currentAgent->path.at(i)->getIDNumber()-1).getIDNumber() << "address: " << addressof(cells.at(currentAgent->path.at(i)->getIDNumber() - 1)) << endl;
+	}*/
 }

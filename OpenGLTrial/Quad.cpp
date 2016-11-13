@@ -80,7 +80,7 @@ void Quad::draw() {
 	glEnd();
 }
 
-virtual void Quad::setColor(GLfloat r, GLfloat g, GLfloat b) {
+	void Quad::setColor(GLfloat r, GLfloat g, GLfloat b) {
 	this->setRedValue(r);
 	this->setBlueValue(b);
 	this->setGreenValue(g);

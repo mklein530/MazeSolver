@@ -9,12 +9,14 @@ using geneType = int;
 struct Genome {
 	vector<geneType> chromosome;
 	double fitness;
+    vector<GLfloat> chromColor; //color of the path
 	Genome() : fitness(0) {}
-	Genome(const int numBits) {
+	Genome(const int numBits, const GLfloat r, const GLfloat g, const GLfloat b) {
 		//create a random bit string
 		for (int i = 0; i < numBits; i++) {
 			chromosome.push_back(randInt(0, 1));
 		}
+		chromColor = { r, g, b };
 	}
 };
 

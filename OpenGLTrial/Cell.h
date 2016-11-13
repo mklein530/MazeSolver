@@ -13,6 +13,7 @@ private:
 	bool start, end;
 	bool trap;
 	bool visited;
+	bool agent;
 	int idNumber;
 	int rowNum, colNum;
 	bool marked; //all neighbors of cell have been visited (BFS)
@@ -25,6 +26,7 @@ public:
 	Cell(int rowNum, int colNum);
 	Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2);
 
+	
 	void reset();
 	int getIDNumber();
 	void setID(int ID);
@@ -36,6 +38,7 @@ public:
 	bool isWall();
 	bool isStart();
 	bool isEnd();
+	bool isAgent();
 	bool isTrap();
 	bool isPath();
 	bool hasBeenVisited();
@@ -47,6 +50,7 @@ public:
 	void setEnd();
 	void setTrap();
 	void setPath();
+	void setAgent(bool);
 	void setCellColor();
 	void setCellColor(GLfloat r, GLfloat g, GLfloat b);
 	void printColor();

@@ -7,31 +7,34 @@ using namespace std;
 Cell::Cell() {
 	this->rowNum = 0;
 	this->colNum = 0;
-	start = false;
-	end = false;
-	trap = false;
-	visited = false;
-	wall = true;
+	this->start = false;
+	this->end = false;
+	this->trap = false;
+	this->visited = false;
+	this->wall = true;
 	color = "empty";
 	this->parent = 0;
-	marked = false;
-	shortestPath = false;
-	idNumber = 0;
+	this->marked = false;
+	this->shortestPath = false;
+	this->idNumber = 0;
+	this->agent = false;
 }
 
 Cell::Cell(int rowNum, int colNum) : Quad() {
 	this->rowNum = rowNum;
 	this->colNum = colNum;
-	start = false;
-	end = false;
-	trap = false;
-	visited = false;
-	wall = true;
+	this->start = false;
+	this->end = false;
+	this->trap = false;
+	this->visited = false;
+	this->wall = true;
 	color = "empty";
 	this->parent = 0;
-	marked = false;
-	shortestPath = false;
-	idNumber = (rowNum - 1) * CELLS_IN_ROW + colNum;
+	this->marked = false;
+	this->shortestPath = false;
+	this->idNumber = (rowNum - 1) * CELLS_IN_ROW + colNum;
+	this->agent = false;
+
 }
 
 Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, double y1, double x2, double y2) :
@@ -39,16 +42,18 @@ Cell::Cell(int rowNum, int colNum, double r, double g, double b, double x1, doub
 {
 	this->rowNum = rowNum;
 	this->colNum = colNum;
-	start = false;
-	end = false;
-	trap = false;
-	visited = false;
-	wall = true;
-	marked = false;
+	this->start = false;
+	this->end = false;
+	this->trap = false;
+	this->visited = false;
+	this->wall = true;
+	this->marked = false;
 	color = "empty";
 	this->parent = 0;
-	shortestPath = false;
-	idNumber = (rowNum - 1)*CELLS_IN_ROW + colNum;
+	this->shortestPath = false;
+	this->idNumber = (rowNum - 1)*CELLS_IN_ROW + colNum;
+	this->agent = false;
+
 }
 
 void Cell::setShortestPath() { shortestPath = true;  }
@@ -58,6 +63,10 @@ bool Cell::isMarked() { return marked; }
 void Cell::setMarked(bool marked) {
 	this->marked = marked;
 }
+
+bool Cell::isAgent() { return agent; }
+
+void Cell::setAgent(bool a) { agent = a; }
 
 int Cell::getRowNum() { return rowNum; }
 
@@ -119,9 +128,10 @@ void Cell::setCellColor() {
 	if (shortestPath && !start && !end) {
 		setColor(0.2f, 0.6f, 0.5f);
 	}
-	else if (visited && !start && !end) {
+	else if (agent && !start && !end)
+		setColor(getRedValue(), getGreenValue(), getBlueValue());
+	else if (visited && !start && !end)
 		setColor(1.0f, 0.5f, 0.0f);
-	}
 	else if (wall)
 		setColor(0.5f, 0.5f, 0.5f);
 	else if (start)

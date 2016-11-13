@@ -17,22 +17,32 @@
 
 using namespace std;
 
-int leftClickCount = 0;
 int health = 100;
 Maze maze(20,20);
-
+GeneticAlgorithm GA(CROSSOVER_RATE, MUTATION_RATE, POP_SIZE, CHROM_LENGTH, GENE_LENGTH, &maze);
+int index = 0;
 
 void onKeyPress(unsigned char key, int x, int y) {
 	switch (key) {
 	case 13: {
 		maze.randomize();
+		GA.epoch();
+		index++;
 	}
 		break;
+	case 103: {
+		if (index % POP_SIZE == 0) {
+			index = 0;
+			GA.epoch();
+		}
+		maze.drawAgentPath(index++);
+	}
+	    break;
+	case 98: {
+		maze.BFS();
+	}
 	case 100: {
-		maze.setGA(true);
-		GeneticAlgorithm GA(CROSSOVER_RATE, MUTATION_RATE, POP_SIZE, CHROM_LENGTH, GENE_LENGTH, &maze);
-		GA.epoch();
-		break;
+		maze.DFS();
 	}
 	default: break;
 	}
@@ -42,6 +52,7 @@ void onMouseClick(int button, int state, int x, int y) {
 	//convert window coordinates to opengl coordinates
 	float mx = -1 + 2 * (float)x / SCREEN_WIDTH;
 	float my = -1 + 2 * (float)(SCREEN_HEIGHT - y) / SCREEN_HEIGHT;
+	static int leftClickCount = 0;
 
 	int clickedCell = maze.clickedCell(mx, my);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && clickedCell != -1) {

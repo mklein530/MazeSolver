@@ -25,5 +25,3 @@ inline bool   randBool()
 
 //returns a random float in the range -1 < n < 1
 inline double randomClamped() { return randFloat() - randFloat(); }
-
-
