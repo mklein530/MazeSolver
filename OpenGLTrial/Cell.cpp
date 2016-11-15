@@ -156,4 +156,5 @@ void Cell::reset() {
 	start = false;
 	end = false;
 	trap = false;
+	agent = false;
 }
