@@ -1,0 +1,14 @@
+﻿  Maze.cpp
+d:\school\csci 491\mazesolver5\mazesolver5\maze.h(34): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.h(40): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.h(51): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
+d:\school\csci 491\mazesolver5\mazesolver5\maze.h(52): warning C4305: 'initializing': truncation from 'double' to 'const GLfloat'
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(93): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(148): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(220): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(311): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(367): warning C4018: '<': signed/unsigned mismatch
+d:\school\csci 491\mazesolver5\mazesolver5\maze.cpp(371): warning C4018: '<': signed/unsigned mismatch
+  MazeSolver5.vcxproj -> D:\School\CSCI 491\MazeSolver5\Debug\MazeSolver5.exe
+  MazeSolver5.vcxproj -> D:\School\CSCI 491\MazeSolver5\Debug\MazeSolver5.pdb (Partial PDB)
